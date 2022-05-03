@@ -22,15 +22,22 @@ if __name__=='__main__':
     SMALL_SIZE = 8
     MEDIUM_SIZE = 10
     BIGGER_SIZE = 20
-
-    var = pd.read_excel('for_plot.xlsx')
+    file_list = ['1250_25_3_55.xlsx','2500_25_3_55.xlsx','5000_25_3_55.xlsx']
+    color_list = ['black','red','green']
+    i=0
+    var = pd.read_excel(file_list[0])
+    var_1 = pd.read_excel(file_list[1])
+    var_2 = pd.read_excel(file_list[2])
     # print(var)
 
-    x = list(var['genRuntime'])
-    y = list(var['bestFit'])
-
-    plt.boxplot(y)
-    plt.show()
+    x = list(var['genRuntime'])  
+    y = list(var['bestFit']) 
+    x_1 = list(var_1['genRuntime'])
+    y_1 = list(var_1['bestFit'])
+    x_2 = list(var_2['genRuntime'])
+    y_2 = list(var_2['bestFit'])
+    #plt.boxplot(y)
+    #plt.show()
 
     #plt.figure(figsize=(15, 15))
     plt.rc('font', size=SMALL_SIZE)  # controls default text sizes
@@ -46,9 +53,12 @@ if __name__=='__main__':
     # plt.scatter(x, y, marker="*", s=100, edgecolors="black", c="yellow")
     # plt.scatter(x, y, edgecolors="black",)
     fig, ax2 = plt.subplots()
-    ax2.scatter(x, y, edgecolors="black")
+    ax2.scatter(x, y, edgecolors=color_list[0])
+    ax2.scatter(x_1, y_1, edgecolors=color_list[1])
+    ax2.scatter(x_2, y_2, edgecolors=color_list[2])
+    plt.xlabel("Runtime in sec")
+    plt.ylabel("Distance in pixel unit")
     plt.show()
-    # plt.xlabel("Runtime in sec")
-    # plt.ylabel("Distance in pixel unit")
+
     # plt.title("Some title here")
 

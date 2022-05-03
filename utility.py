@@ -13,6 +13,7 @@ class MotherBoardInput:
         img = mpimg.imread(photo_name)
         self.json_name = json_name
         self.gray = img[:, :, 2]
+        self.visit_time_range = 4
 
     # Return a tuple(regions, gluewidth),
     #   where regions is a list of rectangles,
@@ -24,16 +25,25 @@ class MotherBoardInput:
         shapes = data['shapes']
         regions = []
         gluewidth = -1.
+        j = 0
+        real_idx = []
+        real_idx_accumulation = []
         for item in shapes:
             if item['label'] == 'gluewidth':
                 gluewidth = item['points'][1][1] - item['points'][0][1]
             else:
+                j+=1
                 #for a in item['points']:
                     #a = sorted(a)
                     #print(tuple(map(int, a)))
                 #regions.append([tuple(map(int, a)) for a in item['points']])
-                regions.append(sort_verices([tuple(map(int, a)) for a in item['points']]))
-        return regions, gluewidth, self.gray
+                np.random.seed(j-1)
+                visited_time = np.random.choice(range(1,self.visit_time_range),1).tolist()[0]
+                real_idx_accumulation.append(visited_time)
+                for i in range(visited_time):
+                    real_idx.append(j-1)
+                    regions.append(sort_verices([tuple(map(int, a)) for a in item['points']]))
+        return regions, gluewidth, self.gray, real_idx, real_idx_accumulation
 
     # Return the rectangle region based on the index of mother board image
     def target_area(self, x, y, x2, y2):
@@ -76,10 +86,10 @@ class PathToolBox:
                 corners = np.concatenate([corners, [self.target_regions[rect.rect][rect.i]]], axis=0)
                 corners = np.concatenate([corners, [self.target_regions[rect.rect][rect.o]]], axis=0)
                 # corners.extend(self.target_regions[rect.rect][rect.i], self.target_regions[rect.rect][rect.o])
-                plt.plot(corners[:, 0], corners[:, 1], color='blue')
-                plt.plot(corners[:, 0][0], corners[:, 1][0],
-                         corners[:, 0][1] - corners[:, 0][0],
-                         corners[:, 1][1] - corners[:, 1][0], )
+                plt.plot(corners[:, 0], corners[:, 1], color='black')
+#                plt.plot(corners[:, 0][0], corners[:, 1][0],
+#                         corners[:, 0][1] - corners[:, 0][0],
+#                         corners[:, 1][1] - corners[:, 1][0], )
         plt.show()
 
     def angle(self, v1):
@@ -196,7 +206,7 @@ def sort_verices(v):
 
 
 if __name__ == "__main__":
-    mb_info = MotherBoardInput('mother_board.png', 'rectangles.json').info_extraction()
+    mb_info = MotherBoardInput('mother_board.png', '10&15data/25_chips/25_1.json').info_extraction()
     rect_list = mb_info[0]
     glue_width = mb_info[1]
     path_tool = PathToolBox(rect_list, glue_width, mb_info[2])

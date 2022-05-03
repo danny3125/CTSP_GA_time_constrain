@@ -77,10 +77,13 @@ class Individual:
         if self.fit == None: self.fit = self.__class__.fitFunc(self.x)
 
 
-MB_INFO = utility.MotherBoardInput('mother_board.png', 'rectangles.json').info_extraction()
+MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/25_chips/25_1.json').info_extraction()
 RECT_LIST = MB_INFO[0]
+print(len(RECT_LIST))
 GLUE_WIDTH = MB_INFO[1]
 PATH_TOOL = utility.PathToolBox(RECT_LIST, GLUE_WIDTH, MB_INFO[2])
+real_idx = MB_INFO[3]
+real_idx_accumulation = MB_INFO[4]
 
 
 class FullPath(Individual):
@@ -195,18 +198,45 @@ class Rectangle:
 # 起點、終點的cost怎麼算？
 def cost_func(path, cost_type):
     total = 0
+    extra_waiting_time = 0
+    nozzle_speed = 30
+    waiting_time = 5
+    time_stamp = []
+    transfer_idx = []
     if (len(path)):
         last_r = path[0]
         if cost_type:
             for this_r in path:
                 total += PATH_TOOL.dist_max(RECT_LIST[last_r.rect][last_r.o], RECT_LIST[this_r.rect][this_r.i])
                 total += PATH_TOOL.dist_max(RECT_LIST[this_r.rect][this_r.i], RECT_LIST[this_r.rect][this_r.o])
+                time_stamp.append(total)
                 last_r = this_r
         else:
             for this_r in path:
                 total += PATH_TOOL.dist_euler(RECT_LIST[last_r.rect][last_r.o], RECT_LIST[this_r.rect][this_r.i])
                 total += PATH_TOOL.dist_euler(RECT_LIST[this_r.rect][this_r.i], RECT_LIST[this_r.rect][this_r.o])
+                time_stamp.append(total)
                 last_r = this_r
+        for checkpoint in path:
+            transfer_idx.append(real_idx[checkpoint.rect])
+        idx_time = zip(transfer_idx,time_stamp)
+        idx_time = sorted(idx_time, key=lambda x: x[0])
+        total_idx = 0
+        for item in real_idx_accumulation:
+            compare_list = []
+            if item >1:
+                for i in range(item):
+                    compare_list.append(idx_time[total_idx + i][1])
+                compare_list.sort(reverse=True)
+                total_idx += item
+                for i in range(len(compare_list)-1):
+                    dis_step = compare_list[i] - compare_list[i+1]
+                    dry_time = nozzle_speed*waiting_time
+                    if (dis_step) < (dry_time):
+                        extra_waiting_time += dry_time - dis_step
+            else:
+                total_idx += item
+        total += extra_waiting_time
     return total
 
 def crossing(parents, prng=None):

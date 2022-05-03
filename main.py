@@ -11,7 +11,7 @@ import sys
 import time
 import utility
 
-MB_INFO = utility.MotherBoardInput('mother_board.png', 'rectangles.json').info_extraction()
+MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/25_chips/25_1.json').info_extraction()
 RECT_LIST = MB_INFO[0]
 GLUE_WIDTH = MB_INFO[1]
 PATH_TOOL = utility.PathToolBox(RECT_LIST, GLUE_WIDTH, MB_INFO[2])
@@ -118,12 +118,6 @@ def CTSP_problem(seed=None, cfg=None, pool=None):
                                                total_t=total_t, lb=current_best.fit)
         if current_avg - current_best.fit < 1e-4:
             break
-        if i > 180 and current_best.fit > 3800:
-            break
-        if i > 250 and current_best.fit > 3600:
-            break
-        if i > 280 and current_best.fit > 3550:
-            break
     print('--------')
     print('Done!')
     print('--------')
@@ -176,15 +170,15 @@ def paralleled_CTSP_problem(times, cfg, file):
     prng = random.Random()
     prng.seed(cfg.randomSeed)
     seeds = prng.choices([i for i in range(10000, 100000)], k=times)
-
     tsp_task = partial(CTSP_problem, cfg=cfg, pool=None)
     # result: current_best, current_avg, gen, total_t
     result = pool.map(tsp_task, seeds)
-
+    print('run here')
     '''for t in range(times):
         cfg.randomSeed = prng.choice(seeds)
         best_inds.append(CTSP_problem(cfg, pool))'''
     mvp = result[0][0]
+    
     for ind in result:
         # PATH_TOOL.path_plot(ind[0].x)
         print('Best fit: ', ind[0].fit)
@@ -255,7 +249,7 @@ def main(argv=None):
         paralleled_CTSP_problem(90, cfg, options.outputFileName)
         '''
 
-        cfg.populationSize = 1250
+        cfg.populationSize = 7500
         paralleled_CTSP_problem(30, cfg, options.outputFileName)
 
 
