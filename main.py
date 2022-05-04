@@ -249,7 +249,7 @@ def main(argv=None):
         paralleled_CTSP_problem(90, cfg, options.outputFileName)
         '''
 
-        cfg.populationSize = 7500
+        cfg.populationSize = 10000
         paralleled_CTSP_problem(30, cfg, options.outputFileName)
 
 

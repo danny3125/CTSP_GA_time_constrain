@@ -22,7 +22,7 @@ if __name__=='__main__':
     SMALL_SIZE = 8
     MEDIUM_SIZE = 10
     BIGGER_SIZE = 20
-    file_list = ['1250_25_3_55.xlsx','2500_25_3_55.xlsx','5000_25_3_55.xlsx']
+    file_list = ['10000_25_3_55.xlsx','2500_25_3_55.xlsx','5000_25_3_55.xlsx']
     color_list = ['black','red','green']
     i=0
     var = pd.read_excel(file_list[0])
