@@ -3,6 +3,8 @@ import numpy as np
 import utility
 import copy
 from random import Random
+import yaml
+import os
 
 # reuse the individual code from ev3
 '''class Individual:
@@ -83,8 +85,9 @@ print(len(RECT_LIST))
 GLUE_WIDTH = MB_INFO[1]
 PATH_TOOL = utility.PathToolBox(RECT_LIST, GLUE_WIDTH, MB_INFO[2])
 real_idx = MB_INFO[3]
+print(real_idx)
 real_idx_accumulation = MB_INFO[4]
-
+print(real_idx_accumulation)
 
 class FullPath(Individual):
     minMutRate = 2e-4
@@ -107,6 +110,7 @@ class FullPath(Individual):
         self.corner_initialize()
         self.uniprng.shuffle(self.x)
         self.evaluateFitness()
+        self.num_ground_truthes = 0
 
     def corner_initialize(self):
         np.vectorize(self.set_corner_pair)(self.x)
@@ -169,7 +173,7 @@ class FullPath(Individual):
 
     def evaluateFitness(self):
         if self.fit == None:
-            self.fit = self.fitFunc(self.x, self.costType)
+            self.fit = self.fitFunc(self.x, self.costType, self.num_ground_truthes)
 
     def __str__(self):
         output = ''
@@ -196,13 +200,15 @@ class Rectangle:
 
 
 # 起點、終點的cost怎麼算？
-def cost_func(path, cost_type):
+def cost_func(path, cost_type, num_ground_truthes):
     total = 0
     extra_waiting_time = 0
     nozzle_speed = 30
     waiting_time = 5
     time_stamp = []
     transfer_idx = []
+    ground_truth_prepare = []
+    good_dis_perform = 6300
     if (len(path)):
         last_r = path[0]
         if cost_type:
@@ -218,7 +224,11 @@ def cost_func(path, cost_type):
                 time_stamp.append(total)
                 last_r = this_r
         for checkpoint in path:
+            corner_map_tool = [0,3,2,1]
             transfer_idx.append(real_idx[checkpoint.rect])
+            ground_truth_prepare.append(real_idx[checkpoint]*4 + corner_map_tool(checkpoint.i))
+            ground_truth_prepare.append(real_idx[checkpoint]*4 + corner_map_tool(checkpoint.o))
+            #need to map (0,1,2,3) as corners to (0,3,2,1)
         idx_time = zip(transfer_idx,time_stamp)
         idx_time = sorted(idx_time, key=lambda x: x[0])
         total_idx = 0
@@ -237,6 +247,15 @@ def cost_func(path, cost_type):
             else:
                 total_idx += item
         total += extra_waiting_time
+    if total < good_dis_perform:
+        num_ground_truthes += 1
+        if num_ground_truthes < 10:
+            pathpoints_dir = os.path.join("ground_truth")
+            if not os.path.exists(pathpoints_dir):
+                os.makedirs(pathpoints_dir)
+            name = 'ground_truth/ground_truth '+str(len(path))+'.yaml'
+            with open(name, 'w') as file:
+                documents = yaml.dump(ground_truth_prepare,file)
     return total
 
 def crossing(parents, prng=None):
