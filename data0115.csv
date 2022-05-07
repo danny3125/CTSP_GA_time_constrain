@@ -30,3 +30,11 @@ populationSize,gen,bestFit,avgFit,genRuntime
 ,143,6821.804381995369,6821.804381996048,8975.114927888
 ,317,6520.3713265154665,6520.371326515026,12219.339409391
 ,349,6427.477577700287,6441.231080816038,13707.242077938998
+populationSize,gen,bestFit,avgFit,genRuntime
+5000,,,,
+populationSize,gen,bestFit,avgFit,genRuntime
+5000,,,,
+populationSize,gen,bestFit,avgFit,genRuntime
+5000,,,,
+populationSize,gen,bestFit,avgFit,genRuntime
+5000,,,,

@@ -82,12 +82,12 @@ class Individual:
 MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/25_chips/25_1.json').info_extraction()
 RECT_LIST = MB_INFO[0]
 print(len(RECT_LIST))
+print(RECT_LIST)
 GLUE_WIDTH = MB_INFO[1]
 PATH_TOOL = utility.PathToolBox(RECT_LIST, GLUE_WIDTH, MB_INFO[2])
 real_idx = MB_INFO[3]
-print(real_idx)
 real_idx_accumulation = MB_INFO[4]
-print(real_idx_accumulation)
+
 
 class FullPath(Individual):
     minMutRate = 2e-4
@@ -98,6 +98,7 @@ class FullPath(Individual):
     costType = None
     fitFunc = None
     crossFunc = None
+    num_ground_truthes = 0
 
     def __init__(self):
         # super().__init__()
@@ -226,8 +227,8 @@ def cost_func(path, cost_type, num_ground_truthes):
         for checkpoint in path:
             corner_map_tool = [0,3,2,1]
             transfer_idx.append(real_idx[checkpoint.rect])
-            ground_truth_prepare.append(real_idx[checkpoint]*4 + corner_map_tool(checkpoint.i))
-            ground_truth_prepare.append(real_idx[checkpoint]*4 + corner_map_tool(checkpoint.o))
+            ground_truth_prepare.append(real_idx[checkpoint.rect]*4 + corner_map_tool[checkpoint.i])
+            ground_truth_prepare.append(real_idx[checkpoint.rect]*4 + corner_map_tool[checkpoint.o])
             #need to map (0,1,2,3) as corners to (0,3,2,1)
         idx_time = zip(transfer_idx,time_stamp)
         idx_time = sorted(idx_time, key=lambda x: x[0])
