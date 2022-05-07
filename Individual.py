@@ -254,7 +254,7 @@ def cost_func(path, cost_type, num_ground_truthes):
             pathpoints_dir = os.path.join("ground_truth")
             if not os.path.exists(pathpoints_dir):
                 os.makedirs(pathpoints_dir)
-            name = 'ground_truth/ground_truth '+str(len(path))+'.yaml'
+            name = 'ground_truth/ground_truth '+str(total)+'.yaml'
             with open(name, 'w') as file:
                 documents = yaml.dump(ground_truth_prepare,file)
     return total
