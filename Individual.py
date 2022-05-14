@@ -225,7 +225,7 @@ def cost_func(path, cost_type, num_ground_truthes):
                 time_stamp.append(total)
                 last_r = this_r
         for checkpoint in path:
-            corner_map_tool = [3,0,1,2]
+            corner_map_tool = [0,3,2,1]
             transfer_idx.append(real_idx[checkpoint.rect])
             ground_truth_prepare.append(real_idx[checkpoint.rect]*4 + corner_map_tool[checkpoint.i])
             ground_truth_prepare.append(real_idx[checkpoint.rect]*4 + corner_map_tool[checkpoint.o])
