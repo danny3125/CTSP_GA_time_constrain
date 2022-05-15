@@ -42,7 +42,14 @@ class MotherBoardInput:
                 real_idx_accumulation.append(visited_time)
                 for i in range(visited_time):
                     real_idx.append(j-1)
-                    regions.append(sort_verices([tuple(map(int, a)) for a in item['points']]))
+                    start_point = item['points'][0]
+                    end_point = item['points'][2]
+                    length = end_point[1] - start_point[1]
+                    width = end_point[0] - end_point[0]
+                    point_rd = [start_point[0] + width,start_point[1]]
+                    point_lu = [start_point[0], start_point[1] + length]
+                    corners_point = [start_point, point_rd, end_point, point_lu]
+                    regions.append(sort_verices([tuple(map(int, a)) for a in corners_point]))
         return regions, gluewidth, self.gray, real_idx, real_idx_accumulation
 
     # Return the rectangle region based on the index of mother board image
