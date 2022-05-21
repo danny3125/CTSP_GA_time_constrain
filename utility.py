@@ -45,7 +45,7 @@ class MotherBoardInput:
                     start_point = item['points'][0]
                     end_point = item['points'][2]
                     length = end_point[1] - start_point[1]
-                    width = end_point[0] - end_point[0]
+                    width = end_point[0] - start_point[0]
                     point_rd = [start_point[0] + width,start_point[1]]
                     point_lu = [start_point[0], start_point[1] + length]
                     corners_point = [start_point, point_rd, end_point, point_lu]

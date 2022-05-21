@@ -11,7 +11,7 @@ import sys
 import time
 import utility
 
-MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/25_chips/25_2corners.json').info_extraction()
+MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/30_chips/30_1.json').info_extraction()
 RECT_LIST = MB_INFO[0]
 GLUE_WIDTH = MB_INFO[1]
 PATH_TOOL = utility.PathToolBox(RECT_LIST, GLUE_WIDTH, MB_INFO[2])
