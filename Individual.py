@@ -205,7 +205,7 @@ def cost_func(path, cost_type, num_ground_truthes):
     total = 0
     extra_waiting_time = 0
     nozzle_speed = 30
-    waiting_time = 70
+    waiting_time = 20
     time_stamp = []
     transfer_idx = []
     ground_truth_prepare = []
