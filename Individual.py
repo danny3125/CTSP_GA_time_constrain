@@ -79,7 +79,7 @@ class Individual:
         if self.fit == None: self.fit = self.__class__.fitFunc(self.x)
 
 
-MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/25_chips/25_3corners.json').info_extraction()
+MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/25_chips/25_GCN_11.json').info_extraction()
 RECT_LIST = MB_INFO[0]
 print(len(RECT_LIST))
 print(RECT_LIST)
@@ -205,11 +205,11 @@ def cost_func(path, cost_type, num_ground_truthes):
     total = 0
     extra_waiting_time = 0
     nozzle_speed = 30
-    waiting_time = 20
+    waiting_time = 10
     time_stamp = []
     transfer_idx = []
     ground_truth_prepare = []
-    good_dis_perform = 12000
+    good_dis_perform = 8000
     if (len(path)):
         last_r = path[0]
         if cost_type:
