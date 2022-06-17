@@ -654,3 +654,5 @@ populationSize,gen,bestFit,avgFit,genRuntime
 ,202,5751.3356918039735,5751.335691803286,6454.819973923
 populationSize,gen,bestFit,avgFit,genRuntime
 5000,,,,
+populationSize,gen,bestFit,avgFit,genRuntime
+5000,,,,

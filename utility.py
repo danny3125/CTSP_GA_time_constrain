@@ -39,10 +39,11 @@ class MotherBoardInput:
                 #regions.append([tuple(map(int, a)) for a in item['points']])
                 # np.random.seed(j-1)
                 # visited_time = np.random.choice(range(1,self.visit_time_range),1).tolist()[0]
-                if (j-1) < 12 :
+                if (j-1) < 7 :
                     visited_time = 1
                 else:
-                    visited_time = 3
+                    np.random.seed(j-1)
+                    visited_time = np.random.choice(range(1,self.visit_time_range),1).tolist()[0]
                 real_idx_accumulation.append(visited_time)
                 for i in range(visited_time):
                     real_idx.append(j-1)
