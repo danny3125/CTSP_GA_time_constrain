@@ -209,7 +209,7 @@ def cost_func(path, cost_type, num_ground_truthes):
     time_stamp = []
     transfer_idx = []
     ground_truth_prepare = []
-    good_dis_perform = 6800
+    good_dis_perform = 7200
     if (len(path)):
         last_r = path[0]
         if cost_type:
