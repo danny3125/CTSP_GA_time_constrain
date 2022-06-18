@@ -79,7 +79,7 @@ class Individual:
         if self.fit == None: self.fit = self.__class__.fitFunc(self.x)
 
 
-MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/25_chips/25_GCN_4corners_12.json').info_extraction()
+MB_INFO = utility.MotherBoardInput('mother_board.png', '10&15data/25_chips/25_GCN_17.json').info_extraction()
 RECT_LIST = MB_INFO[0]
 print(len(RECT_LIST))
 print(RECT_LIST)
